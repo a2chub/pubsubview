@@ -9,7 +9,10 @@ python3 -m venv venv --prompt pubsubview
 source venv/bin/activate.fish
 pip install -U pip
 pip install -r requirements.txt
+```
 
+## run
+```
 python main_server.py
 ```
 
