@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="mask-icon" href="./favicon.svg" color="black">
+    <title>pubsub viewer</title>
+    <script>
+      console.log("start socket");
+      var uri = "ws://localhost:{{data.FLASK_PORT}}/channel";
+      webSocket = new WebSocket(uri);
+      webSocket.onopen = function (e) {
+        console.log(e);
+      };
+
+      webSocket.onerror = function (error) {
+        console.log('WebSocket Error ' + error);
+      };
+
+      webSocket.onmessage = function(e) {
+        var sub_json = JSON.parse(e.data);
+        console.info( sub_json.version );
+        view_data( JSON.stringify(sub_json) );
+      };
+
+      function view_data(mes){
+        var parent = document.createElement("div");
+        var p = document.createElement("p")
+        var hr = document.createElement("hr")
+        parent.prepend(update(), p);
+        parent.append(mes, hr);
+
+        var viewer = document.getElementById('sub_data');
+        viewer.prepend( parent );
+      }
+
+      function update(){
+        var datetime = document.getElementById('update');
+        var now = new Date();
+        var lcltime = now.toLocaleString();
+        return lcltime
+      }
+    </script>
+
+  </head>
+  <body>
+    <div id='update'></div>
+    <div id='sub_data'></div>
+  </body>
+</html>
